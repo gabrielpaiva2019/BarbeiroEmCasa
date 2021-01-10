@@ -73,11 +73,18 @@ class ClienteLogadoViewModel(application: Application):
 
     private fun validaSeJaFoiAdicionadoOBarbeiroNaLista(snapshot: DataSnapshot) {
         val barbeiroSnapshot = snapshot.getValue(Barbeiro::class.java)!!
-        for (barbeiro in listaBarbeiros){
-            if (barbeiro.uid != barbeiroSnapshot.uid){
-                listaBarbeiros.add(barbeiroSnapshot)
+
+        try {
+            for (barbeiro in listaBarbeiros){
+                if (barbeiro.uid != barbeiroSnapshot.uid){
+                    listaBarbeiros.add(barbeiroSnapshot)
+                }
             }
+        } catch (exception: ConcurrentModificationException){
+
+
         }
+
 
         if (listaBarbeiros.size == 0){
             listaBarbeiros.add(barbeiroSnapshot)

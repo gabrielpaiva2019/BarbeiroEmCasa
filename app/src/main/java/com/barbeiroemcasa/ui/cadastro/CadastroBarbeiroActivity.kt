@@ -21,6 +21,7 @@ import com.barbeiroemcasa.model.Barbeiro
 import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.barbeiroLogado.BarbeiroLogadoActivity
 import com.barbeiroemcasa.util.MaskEditUtil
+import com.github.loadingview.LoadingDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_cadastro_barbeiro.*
 
@@ -63,8 +64,8 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
             if (isPermissoesAceitas()){
                 if (!editTextEmailBarbeiro.text.isNullOrBlank() && !editTextInstagramBarbeiro.text.isNullOrBlank() && !editTextNomeBarbeiro.text.isNullOrBlank() != null &&
                     !editTextSenhaBarbeiro.text.isNullOrBlank() != null && !editTextWhatsappBarbeiro.text.isNullOrBlank() != null) {
-
                     viewModel.criarNovaContaBarbeiro(getBarbeiroObject())
+                    LoadingDialog[this].show()
                 } else {
                     Toast.makeText(this, "Todos os campos devem ser preenchidos", Toast.LENGTH_LONG).show()
                 }
@@ -78,12 +79,13 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
     private fun getBarbeiroObject(): Barbeiro {
         var barbeiro = Barbeiro()
         barbeiro.nomeBarbeiro = editTextNomeBarbeiro.stringText()
-        barbeiro. whatsappBarbeiro = editTextWhatsappBarbeiro.stringText()
+        barbeiro.whatsappBarbeiro = CadastroBarbeiroViewHelper()
+            .getNumeroTelefoneFormatado(editTextWhatsappBarbeiro.stringText())
         barbeiro.instagramBarbeiro = editTextInstagramBarbeiro.stringText()
         barbeiro.emailBarbeiro = editTextEmailBarbeiro.stringText()
         barbeiro.senhaBarbeiro = editTextSenhaBarbeiro.stringText()
         barbeiro.uid = ""
-        return Barbeiro()
+        return barbeiro
     }
 
     private fun inicializaVariaveis() {
