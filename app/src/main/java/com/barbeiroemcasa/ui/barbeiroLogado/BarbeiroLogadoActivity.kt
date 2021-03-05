@@ -3,6 +3,7 @@ package com.barbeiroemcasa.ui.barbeiroLogado
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -10,11 +11,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import com.barbeiroemcasa.BaseActivity
 import com.barbeiroemcasa.R
 import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
+import com.barbeiroemcasa.ui.feed.FeedActivity
+import com.barbeiroemcasa.ui.uploadimage.SubirImagemFeedActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -41,16 +45,22 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
     private fun inicializaBottomSheet() {
         val bottomSheet = findViewById<View>(R.id.bottomSheetBarbeiroLogado)
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        val buttonEntendi = findViewById<Button>(R.id.buttonEntendiBottomSheetMaps)
+        val buttonSubirFoto = findViewById<CardView>(R.id.cardViewAdicionarFoto)
+        val cardViewFeed = findViewById<CardView>(R.id.cardViewFeed)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        buttonEntendi.setOnClickListener { bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED }
+        buttonSubirFoto.setOnClickListener {
+            startActivity(Intent(this, SubirImagemFeedActivity::class.java))
+        }
+        cardViewFeed.setOnClickListener {
+            startActivity(Intent(this, FeedActivity::class.java))
+        }
     }
 
     private fun inicializaMapa() {
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.mapaBarbeiro) as SupportMapFragment?
-        mapFragment!!.getMapAsync(this)
+        mapFragment?.getMapAsync(this)
     }
 
     private fun inicializaVariaveis() {
@@ -64,20 +74,9 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         configuraMarcador(location)
     }
 
-    private fun mostrarDialogIncentivoNaoDesinstalar() {
-        val dialogBuilder = AlertDialog.Builder(this)
-        dialogBuilder.setMessage("Olá, tudo bem? \n somos uma nova empresa e estamos com uma versao beta do nosso app, pedimos que nao desinstale por favor" +
-                " estamos criando uma rede de usuarios e em breve você começará receber clientes atraves de nosso app :)")
-            .setCancelable(false)
-            .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
-            }
-
-        val alert = dialogBuilder.create()
-        alert.show()
-    }
 
     private fun salvaLocalizacaoFirebase(location: Location) {
-         currentLatlngUser =
+        currentLatlngUser =
             LatLng(
                 lat = location.latitude,
                 lng = location.longitude
@@ -89,14 +88,14 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
     override fun onStart() {
         super.onStart()
         configuraLocalizacao()
-        mostrarDialogIncentivoNaoDesinstalar()
     }
 
     @SuppressLint("MissingPermission")
     private fun configuraLocalizacao() {
         location.requestLocationUpdates(
             LocationManager.GPS_PROVIDER,
-            5000, 2.0f, this)
+            5000, 2.0f, this
+        )
     }
 
     override fun onProviderEnabled(provider: String) {}
@@ -114,29 +113,29 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
 
 
     private fun configuraMarcador(location: Location) {
-            viewModel.locationLiveData.observe(this, Observer {
+        viewModel.locationLiveData.observe(this, Observer {
 
-                var position =
-                    location?.latitude?.let {
-                        location?.longitude?.let { it1 ->
-                            com.google.android.gms.maps.model.LatLng(
-                                it,
-                                it1
-                            )
-                        }
+            var position =
+                location?.latitude?.let {
+                    location?.longitude?.let { it1 ->
+                        com.google.android.gms.maps.model.LatLng(
+                            it,
+                            it1
+                        )
                     }
+                }
 
 
-                    googleMap?.addMarker(
-                        position?.let {
-                            MarkerOptions()
-                                .position(it)
-                                .title("Você está aqui :)")
-                        }
-                    )
-                googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 32.0f))
+            googleMap?.addMarker(
+                position?.let {
+                    MarkerOptions()
+                        .position(it)
+                        .title("Você está aqui :)")
+                }
+            )
+            googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 32.0f))
 
-                googleMap.animateCamera(CameraUpdateFactory.newLatLng(position))
+            googleMap.animateCamera(CameraUpdateFactory.newLatLng(position))
 
         })
 

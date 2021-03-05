@@ -72,22 +72,32 @@ class ClienteLogadoViewModel(application: Application):
     }
 
     private fun validaSeJaFoiAdicionadoOBarbeiroNaLista(snapshot: DataSnapshot) {
-        val barbeiroSnapshot = snapshot.getValue(Barbeiro::class.java)!!
+        val barbeiroSnapshot = snapshot.getValue(Barbeiro::class.java)
 
         try {
             for (barbeiro in listaBarbeiros){
-                if (barbeiro.uid != barbeiroSnapshot.uid){
-                    listaBarbeiros.add(barbeiroSnapshot)
+                if (barbeiroSnapshot != null){
+                    barbeiro?.let {
+                        if (it.uid != barbeiroSnapshot.uid){
+                            listaBarbeiros.add(barbeiroSnapshot)
+                        }
+                    }
                 }
             }
-        } catch (exception: ConcurrentModificationException){
+        } catch (exception: KotlinNullPointerException){
 
+
+        } catch (concurrentException: ConcurrentModificationException){
 
         }
 
 
         if (listaBarbeiros.size == 0){
-            listaBarbeiros.add(barbeiroSnapshot)
+
+            barbeiroSnapshot?.let {
+                listaBarbeiros.add(barbeiroSnapshot)
+            }
+
         }
     }
 

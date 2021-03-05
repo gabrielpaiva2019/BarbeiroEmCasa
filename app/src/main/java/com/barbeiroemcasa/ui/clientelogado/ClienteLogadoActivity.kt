@@ -102,6 +102,17 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     }
 
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            configuraLocalizacao()
+        }
+    }
+
     override fun onProviderEnabled(provider: String) {}
 
     override fun onProviderDisabled(provider: String) {}

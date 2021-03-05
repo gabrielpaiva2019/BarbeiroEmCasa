@@ -44,7 +44,12 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
     }
 
     private fun inicializaViews() {
-        editTextWhatsappBarbeiro.addTextChangedListener(MaskEditUtil.mask(editTextWhatsappBarbeiro, MaskEditUtil.FORMAT_FONE))
+        editTextWhatsappBarbeiro.addTextChangedListener(
+            MaskEditUtil.mask(
+                editTextWhatsappBarbeiro,
+                MaskEditUtil.FORMAT_FONE
+            )
+        )
     }
 
     private fun inicializaObservers() {
@@ -52,6 +57,10 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
             if (isSucesso){
                 mostrarTelaBarbeiroLogado()
             }
+        })
+
+        viewModel.errorLiveData.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         })
     }
 
@@ -61,15 +70,16 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
 
     private fun inicializaListeners() {
         buttonCadastrarBarbeiro.setOnClickListener {
-            if (isPermissoesAceitas()){
+            if (isPermissoesAceitas()) {
                 if (!editTextEmailBarbeiro.text.isNullOrBlank() && !editTextInstagramBarbeiro.text.isNullOrBlank() && !editTextNomeBarbeiro.text.isNullOrBlank() != null &&
-                    !editTextSenhaBarbeiro.text.isNullOrBlank() != null && !editTextWhatsappBarbeiro.text.isNullOrBlank() != null) {
+                    !editTextSenhaBarbeiro.text.isNullOrBlank() != null && !editTextWhatsappBarbeiro.text.isNullOrBlank() != null
+                ) {
                     viewModel.criarNovaContaBarbeiro(getBarbeiroObject())
-                    LoadingDialog[this].show()
                 } else {
-                    Toast.makeText(this, "Todos os campos devem ser preenchidos", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Todos os campos devem ser preenchidos", Toast.LENGTH_LONG)
+                        .show()
                 }
-            }else{
+            } else {
                 mostrarDialogIncentivoPermissaoLocalizacao()
             }
 
@@ -90,41 +100,44 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
 
     private fun inicializaVariaveis() {
         location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        viewModel = getViewModel(viewModelClass = CadastroBarbeiroViewModel::class.java,
-            application = application)
+        viewModel = getViewModel(
+            viewModelClass = CadastroBarbeiroViewModel::class.java,
+            application = application
+        )
     }
 
     override fun onStart() {
         super.onStart()
         verificaPermissoesLocalizacao()
-        verificaUsuarioLogado()
-    }
-
-    private fun verificaUsuarioLogado() {
-        if (ApplicationSession.isUsuarioLogado()){
-            mostrarTelaBarbeiroLogado()
-        }
     }
 
     private fun verificaPermissoesLocalizacao() {
-        if (!isPermissoesAceitas()){
+        if (!isPermissoesAceitas()) {
             mostrarDialogIncentivoPermissaoLocalizacao()
-        }else{
+        } else {
             configuraLocalizacao()
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun configuraLocalizacao() {
-        if (isPermissoesAceitas()){
-            location.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                1000, 2.0f, this)
+        if (isPermissoesAceitas()) {
+            location.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000, 2.0f, this
+            )
         }
     }
 
-    private fun isPermissoesAceitas(): Boolean{
-        return ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION)== PackageManager.PERMISSION_GRANTED  &&
-                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED
+    private fun isPermissoesAceitas(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun mostrarDialogIncentivoPermissaoLocalizacao() {
@@ -140,14 +153,20 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
     }
 
     private fun mostrarPermissoes() {
-        ActivityCompat.requestPermissions(this,arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION),LOCATION_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            this, arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ), LOCATION_REQUEST_CODE
+        )
     }
 
     override fun onLocationChanged(location: Location) {
         currentLatlngUser =
-            LatLng(lat = location.latitude,
-            lng = location.longitude)
+            LatLng(
+                lat = location.latitude,
+                lng = location.longitude
+            )
     }
 
     override fun onProviderEnabled(provider: String) {}
@@ -156,9 +175,10 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
 
-    companion object{
+    companion object {
         const val LOCATION_REQUEST_CODE = 2
-        const val PERMISSION_INCENTIVE_MESAGE = "Para prosseguir, precisamos que aceite as permissões de localização, nós utilizamos ela para mostrar aos nossos usuários os barbeiros perto deles"
+        const val PERMISSION_INCENTIVE_MESAGE =
+            "Para prosseguir, precisamos que aceite as permissões de localização, nós utilizamos ela para mostrar aos nossos usuários os barbeiros perto deles"
     }
 
 }

@@ -39,7 +39,6 @@ class BarbeiroLoginActivity : BaseActivity() {
     private fun iniciaObservers() {
         viewModel.isLoggedSuccessLiveData.observe(this, Observer { loginSuccess ->
             if (loginSuccess) {
-                finish()
                 startActivity(Intent(this, BarbeiroLogadoActivity::class.java))
             }
         })
@@ -51,7 +50,7 @@ class BarbeiroLoginActivity : BaseActivity() {
     }
 
     private fun iniciaListeners() {
-        buttonLogar.setOnClickListener {
+        buttonLogar?.setOnClickListener {
             if (!editTextLoginEmail.isEmptyOrBlankString() && !editTextLoginSenha.isEmptyOrBlankString()) {
                 loadingView.show()
                 viewModel.doLogin(editTextLoginEmail.stringText(), editTextLoginSenha.stringText())
@@ -61,7 +60,7 @@ class BarbeiroLoginActivity : BaseActivity() {
 
         }
 
-        textViewCriarNovaConta.setOnClickListener {
+        textViewCriarNovaConta?.setOnClickListener {
             startActivity(Intent(this, CadastroBarbeiroActivity::class.java))
         }
 
@@ -114,6 +113,7 @@ class BarbeiroLoginActivity : BaseActivity() {
     private fun verificaUsuarioJaaLogado() {
         if (ApplicationSession.isUsuarioLogado()) {
             if (!isUsuarioAnonimo()){
+                viewModel.getBarbeiroInformacoes()
                 startActivity(Intent(this, BarbeiroLogadoActivity::class.java))
             }
         }

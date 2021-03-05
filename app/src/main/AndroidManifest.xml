@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Required only when requesting background location access on Android 10 (API level 29). -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarbeiroEmCasa">
-        <activity android:name=".ui.clientelogado.ClienteLogadoActivity"></activity>
+        <activity android:name=".ui.feed.FeedActivity"></activity>
+        <activity android:name=".ui.uploadimage.SubirImagemFeedActivity" />
+        <activity android:name=".ui.clientelogado.ClienteLogadoActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

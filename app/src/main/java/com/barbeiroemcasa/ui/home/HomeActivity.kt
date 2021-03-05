@@ -28,7 +28,6 @@ class HomeActivity : BaseActivity() {
 
         viewModel.loginSuccessLiveData.observe(this, Observer {loginSuccess ->
             if (loginSuccess){
-                finish()
                 startActivity(Intent(this, ClienteLogadoActivity::class.java))
             }else{
 
@@ -41,13 +40,11 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun iniciaListeners() {
-        buttonSouBarbeiro.setOnClickListener {
-            finish()
+        buttonSouBarbeiro?.setOnClickListener {
             startActivity(Intent(this, BarbeiroLoginActivity::class.java))
         }
-        buttonSouCliente.setOnClickListener {
+        buttonSouCliente?.setOnClickListener {
             if (ApplicationSession.isUsuarioLogado()){
-                finish()
                 startActivity(Intent(this, ClienteLogadoActivity::class.java))
             }else{
                 configuraLogin()
@@ -56,8 +53,6 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun configuraLogin() {
-        LoadingDialog[this].show()
-        finish()
         viewModel.doPrivateLogin()
     }
 
