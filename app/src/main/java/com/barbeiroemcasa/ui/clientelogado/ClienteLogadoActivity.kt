@@ -3,6 +3,7 @@ package com.barbeiroemcasa.ui.clientelogado
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -16,6 +17,7 @@ import com.barbeiroemcasa.BaseActivity
 import com.barbeiroemcasa.R
 import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
+import com.barbeiroemcasa.ui.feed.FeedActivity
 import kotlinx.android.synthetic.main.activity_cliente_logado.*
 
 class ClienteLogadoActivity : BaseActivity(), LocationListener {
@@ -30,6 +32,13 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
 
         iniciaVariaveis()
         iniciaObservers()
+        iniciaListeners()
+    }
+
+    private fun iniciaListeners() {
+        fabFeed.setOnClickListener {
+            startActivity(Intent(this, FeedActivity::class.java))
+        }
     }
 
     private fun iniciaObservers() {

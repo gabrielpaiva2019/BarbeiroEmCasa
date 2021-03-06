@@ -4,17 +4,21 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import com.barbeiroemcasa.BaseActivity
 import com.barbeiroemcasa.R
+import com.barbeiroemcasa.infra.ApplicationSession
 import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
 import com.barbeiroemcasa.ui.feed.FeedActivity
@@ -25,6 +29,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.map_barbeiro_bottom_sheet.*
 
 
@@ -47,8 +52,14 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         val buttonSubirFoto = findViewById<CardView>(R.id.cardViewAdicionarFoto)
         val cardViewFeed = findViewById<CardView>(R.id.cardViewFeed)
+        val cardViewSair = findViewById<CardView>(R.id.cardViewLogout)
+        val textViewBoasVindas = findViewById<TextView>(R.id.textViewBoasVindas)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
+        cardViewSair.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            this.finish()
+        }
         buttonSubirFoto.setOnClickListener {
             startActivity(Intent(this, SubirImagemFeedActivity::class.java))
         }
@@ -61,6 +72,28 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.mapaBarbeiro) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
+    }
+
+    private fun mostrarDialogIncentivoPermissaoLocalizacao() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setMessage(CadastroBarbeiroActivity.PERMISSION_INCENTIVE_MESAGE)
+            .setCancelable(false)
+            .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
+                mostrarPermissoes()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.show()
+    }
+
+    private fun mostrarPermissoes() {
+        ActivityCompat.requestPermissions(
+            this, arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            CadastroBarbeiroActivity.LOCATION_REQUEST_CODE
+        )
     }
 
     private fun inicializaVariaveis() {
@@ -87,7 +120,12 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
 
     override fun onStart() {
         super.onStart()
-        configuraLocalizacao()
+        if (isPermissoesAceitas()) {
+            configuraLocalizacao()
+        } else {
+            mostrarDialogIncentivoPermissaoLocalizacao()
+        }
+
     }
 
     @SuppressLint("MissingPermission")
@@ -143,6 +181,17 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
 
     override fun onBackPressed() {
 
+    }
+
+    private fun isPermissoesAceitas(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
 }
