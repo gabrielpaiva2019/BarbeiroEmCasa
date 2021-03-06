@@ -18,12 +18,13 @@ import com.barbeiroemcasa.R
 import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
 import com.barbeiroemcasa.ui.feed.FeedActivity
+import com.barbeiroemcasa.util.AnalyticsUtil
 import kotlinx.android.synthetic.main.activity_cliente_logado.*
 
 class ClienteLogadoActivity : BaseActivity(), LocationListener {
     lateinit var viewModel: ClienteLogadoViewModel
     private lateinit var location: LocationManager
-    private  var currentLatlngUser: LatLng? = null
+    private var currentLatlngUser: LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -38,13 +39,14 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     private fun iniciaListeners() {
         fabFeed.setOnClickListener {
             startActivity(Intent(this, FeedActivity::class.java))
+            AnalyticsUtil.track(this, "cliente_logado")
         }
     }
 
     private fun iniciaObservers() {
         viewModel.listaBarbeirosLiveData.observe(this, Observer {
             recyclerViewBarbeirosDisponiveis.layoutManager = LinearLayoutManager(this)
-           recyclerViewBarbeirosDisponiveis.adapter = ClienteLogadoAdapter(it)
+            recyclerViewBarbeirosDisponiveis.adapter = ClienteLogadoAdapter(it)
         })
     }
 
@@ -56,31 +58,38 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     override fun onStart() {
         super.onStart()
         verificaPermissoesLocalizacao()
-        if (isPermissoesAceitas()){
+        if (isPermissoesAceitas()) {
             currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it) }
         }
     }
 
     private fun verificaPermissoesLocalizacao() {
-        if (!isPermissoesAceitas()){
+        if (!isPermissoesAceitas()) {
             mostrarDialogIncentivoPermissaoLocalizacao()
-        }else{
+        } else {
             configuraLocalizacao()
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun configuraLocalizacao() {
-        if (isPermissoesAceitas()){
+        if (isPermissoesAceitas()) {
             location.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                60000, 2.0f, this)
+                60000, 2.0f, this
+            )
         }
     }
 
-    private fun isPermissoesAceitas(): Boolean{
-        return ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_COARSE_LOCATION)== PackageManager.PERMISSION_GRANTED  &&
-                ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED
+    private fun isPermissoesAceitas(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun mostrarDialogIncentivoPermissaoLocalizacao() {
@@ -96,16 +105,21 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     }
 
     private fun mostrarPermissoes() {
-        ActivityCompat.requestPermissions(this,arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION),
+        ActivityCompat.requestPermissions(
+            this, arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
             CadastroBarbeiroActivity.LOCATION_REQUEST_CODE
         )
     }
 
     override fun onLocationChanged(location: Location) {
         currentLatlngUser =
-            LatLng(lat = location.latitude,
-                lng = location.longitude)
+            LatLng(
+                lat = location.latitude,
+                lng = location.longitude
+            )
 
         currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it) }
     }
@@ -114,10 +128,11 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray) {
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             configuraLocalizacao()
         }
     }

@@ -23,6 +23,7 @@ import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
 import com.barbeiroemcasa.ui.feed.FeedActivity
 import com.barbeiroemcasa.ui.uploadimage.SubirImagemFeedActivity
+import com.barbeiroemcasa.util.AnalyticsUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -64,6 +65,7 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
             startActivity(Intent(this, SubirImagemFeedActivity::class.java))
         }
         cardViewFeed.setOnClickListener {
+            AnalyticsUtil.track(this, "barbeiro_logado")
             startActivity(Intent(this, FeedActivity::class.java))
         }
     }
