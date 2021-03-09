@@ -22,14 +22,18 @@ class HomeActivity : BaseActivity() {
         iniciaVariaveis()
         iniciaObservers()
         iniciaListeners()
+
+        view.setOnClickListener {
+            showLoading()
+        }
     }
 
     private fun iniciaObservers() {
 
-        viewModel.loginSuccessLiveData.observe(this, Observer {loginSuccess ->
-            if (loginSuccess){
+        viewModel.loginSuccessLiveData.observe(this, Observer { loginSuccess ->
+            if (loginSuccess) {
                 startActivity(Intent(this, ClienteLogadoActivity::class.java))
-            }else{
+            } else {
 
             }
         })
@@ -41,12 +45,13 @@ class HomeActivity : BaseActivity() {
 
     private fun iniciaListeners() {
         buttonSouBarbeiro?.setOnClickListener {
-            startActivity(Intent(this, BarbeiroLoginActivity::class.java))
+//            startActivity(Intent(this, BarbeiroLoginActivity::class.java))
+            showLoading()
         }
         buttonSouCliente?.setOnClickListener {
-            if (ApplicationSession.isUsuarioLogado()){
+            if (ApplicationSession.isUsuarioLogado()) {
                 startActivity(Intent(this, ClienteLogadoActivity::class.java))
-            }else{
+            } else {
                 configuraLogin()
             }
         }
