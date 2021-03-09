@@ -1,4 +1,7 @@
 package com.barbeiroemcasa
 
-class Loading {
+import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
+
+abstract class Loading(activity: Activity): AppCompatActivity() {
 }

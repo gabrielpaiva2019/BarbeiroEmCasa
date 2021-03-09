@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.barbeiroemcasa.R
+import kotlinx.android.synthetic.main.loading_fragment.*
 
 class LoadingDialogFragment : DialogFragment() {
 
@@ -50,6 +51,8 @@ class LoadingDialogFragment : DialogFragment() {
 
 
     companion object {
+        const val DEFAULT_TITLE = "Carregando\nAguarde ..."
+
         fun newInstance(
             fragmentManager: FragmentManager,
             callback: OnLoadingDialogCancelListener
@@ -60,6 +63,10 @@ class LoadingDialogFragment : DialogFragment() {
 
             return loadingDialogFragment
         }
+    }
+
+    fun setCustomTitle(title: String?){
+        textViewLoadingTitle?.text = title
     }
 
 

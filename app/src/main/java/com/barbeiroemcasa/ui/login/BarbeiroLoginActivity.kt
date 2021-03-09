@@ -16,6 +16,7 @@ import com.barbeiroemcasa.extensions.stringText
 import com.barbeiroemcasa.infra.ApplicationSession
 import com.barbeiroemcasa.ui.barbeiroLogado.BarbeiroLogadoActivity
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
+import com.barbeiroemcasa.ui.loading.LoadingDialogFragment.Companion.DEFAULT_TITLE
 import com.github.loadingview.LoadingDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_barbeiro_login.*
@@ -24,7 +25,6 @@ import kotlinx.android.synthetic.main.activity_barbeiro_login.*
 class BarbeiroLoginActivity : BaseActivity() {
 
     lateinit var viewModel: BarbeiroLoginViewModel
-    lateinit var loadingView: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,20 +39,21 @@ class BarbeiroLoginActivity : BaseActivity() {
     private fun iniciaObservers() {
         viewModel.isLoggedSuccessLiveData.observe(this, Observer { loginSuccess ->
             if (loginSuccess) {
+                hideLoading()
                 startActivity(Intent(this, BarbeiroLogadoActivity::class.java))
             }
         })
 
         viewModel.errorMessageLiveData.observe(this, Observer { errorMessage ->
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
-            loadingView.hide()
+            hideLoading()
         })
     }
 
     private fun iniciaListeners() {
         buttonLogar?.setOnClickListener {
             if (!editTextLoginEmail.isEmptyOrBlankString() && !editTextLoginSenha.isEmptyOrBlankString()) {
-                loadingView.show()
+                showLoading("Logando\nAguarde ...")
                 viewModel.doLogin(editTextLoginEmail.stringText(), editTextLoginSenha.stringText())
             } else {
                 Toast.makeText(this, "os campos não podem estar vazios", Toast.LENGTH_SHORT).show()
@@ -68,7 +69,6 @@ class BarbeiroLoginActivity : BaseActivity() {
 
     private fun inciaVariaveis() {
         viewModel = getViewModel(BarbeiroLoginViewModel::class.java, application)
-        loadingView = LoadingDialog.get(this)
     }
 
     private fun isPermissoesAceitas(): Boolean {
@@ -112,7 +112,7 @@ class BarbeiroLoginActivity : BaseActivity() {
 
     private fun verificaUsuarioJaaLogado() {
         if (ApplicationSession.isUsuarioLogado()) {
-            if (!isUsuarioAnonimo()){
+            if (!isUsuarioAnonimo()) {
                 viewModel.getBarbeiroInformacoes()
                 startActivity(Intent(this, BarbeiroLogadoActivity::class.java))
             }

@@ -55,6 +55,7 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
     private fun inicializaObservers() {
         viewModel.successLiveData.observe(this, Observer {isSucesso ->
             if (isSucesso){
+                hideLoading()
                 mostrarTelaBarbeiroLogado()
             }
         })
@@ -74,8 +75,10 @@ class CadastroBarbeiroActivity : BaseActivity(), LocationListener {
                 if (!editTextEmailBarbeiro.text.isNullOrBlank() && !editTextInstagramBarbeiro.text.isNullOrBlank() && !editTextNomeBarbeiro.text.isNullOrBlank() != null &&
                     !editTextSenhaBarbeiro.text.isNullOrBlank() != null && !editTextWhatsappBarbeiro.text.isNullOrBlank() != null
                 ) {
+                    showLoading()
                     viewModel.criarNovaContaBarbeiro(getBarbeiroObject())
                 } else {
+                    hideLoading()
                     Toast.makeText(this, "Todos os campos devem ser preenchidos", Toast.LENGTH_LONG)
                         .show()
                 }

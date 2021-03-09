@@ -34,6 +34,9 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
         iniciaVariaveis()
         iniciaObservers()
         iniciaListeners()
+        if (isPermissoesAceitas()) {
+            currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it) }
+        }
     }
 
     private fun iniciaListeners() {
@@ -58,9 +61,7 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     override fun onStart() {
         super.onStart()
         verificaPermissoesLocalizacao()
-        if (isPermissoesAceitas()) {
-            currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it) }
-        }
+
     }
 
     private fun verificaPermissoesLocalizacao() {

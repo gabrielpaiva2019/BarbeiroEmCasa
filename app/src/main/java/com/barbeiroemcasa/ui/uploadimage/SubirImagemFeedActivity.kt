@@ -60,7 +60,7 @@ class SubirImagemFeedActivity : BaseActivity() {
                     ).show()
                 }
                 else -> {
-
+                    showLoading()
                     val feed = Feed()
                     feed.descricaoCorte = editTextDescricaoCorte?.text.toString()
                     feed.nomeCorte = editTextNomeCorte?.text.toString()
@@ -74,6 +74,14 @@ class SubirImagemFeedActivity : BaseActivity() {
     private fun iniciaObservers() {
         viewModel.error.observe(this, Observer {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            hideLoading()
+        })
+        viewModel.feedSalvo.observe(this, Observer {
+            if (it){
+                hideLoading()
+                Toast.makeText(this, "Sua foto foi salva com sucesso, entre na pagina de feed para visualizar", Toast.LENGTH_LONG).show()
+                finish()
+            }
         })
     }
 

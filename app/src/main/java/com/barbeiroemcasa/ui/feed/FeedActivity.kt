@@ -31,6 +31,7 @@ class FeedActivity : BaseActivity(), LocationListener {
 
         location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+        showLoading()
         configViewModel()
         configObservers()
 
@@ -103,9 +104,14 @@ class FeedActivity : BaseActivity(), LocationListener {
 
     private fun configObservers() {
         viewModel.feedLiveData.observe(this, Observer {
+            if (it.size > 0){
+                recyclerViewFeed.layoutManager = LinearLayoutManager(this)
+                recyclerViewFeed.adapter = FeedAdapter(it)
+            }else{
+                textViewInfoListFeedEmpty.visibility = View.VISIBLE
+            }
 
-            recyclerViewFeed.layoutManager = LinearLayoutManager(this)
-            recyclerViewFeed.adapter = FeedAdapter(it)
+            hideLoading()
         })
 
         viewModel.isListFeedEmpty.observe(this, Observer {

@@ -1,19 +1,16 @@
 package com.barbeiroemcasa
 
+import android.app.Activity
 import android.app.Application
-import android.app.ProgressDialog
-import android.content.Context
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.AttributeSet
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.barbeiroemcasa.infra.ViewModelFactory
 import com.barbeiroemcasa.ui.loading.LoadingDialogFragment
+import com.barbeiroemcasa.ui.loading.LoadingDialogFragment.Companion.DEFAULT_TITLE
 
-open class BaseActivity: AppCompatActivity() {
+open class BaseActivity() :  AppCompatActivity() {
     private var loadingDialogFragment: LoadingDialogFragment? = null
 
     fun <T: ViewModel> getViewModel(viewModelClass: Class<T>, application: Application): T {
@@ -45,9 +42,10 @@ open class BaseActivity: AppCompatActivity() {
 
     }
 
-    fun showLoading(){
+    fun showLoading(title: String = DEFAULT_TITLE){
         loadingDialogFragment?.let {
             if (!it.isVisible){
+                it.setCustomTitle(title)
                 it.show(supportFragmentManager, "TAG")
             }
         }
