@@ -9,5 +9,6 @@ class Feed {
     lateinit var horaPublicacao: String
     lateinit var urlFoto: String
     lateinit var uidBarbeiro: String
+    lateinit var uidFeed: String
     var uploadTimestamp = System.currentTimeMillis()
 }

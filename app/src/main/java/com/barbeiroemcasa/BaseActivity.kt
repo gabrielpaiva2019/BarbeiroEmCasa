@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.barbeiroemcasa.infra.ViewModelFactory
 import com.barbeiroemcasa.ui.loading.LoadingDialogFragment
 import com.barbeiroemcasa.ui.loading.LoadingDialogFragment.Companion.DEFAULT_TITLE
+import com.barbeiroemcasa.util.AnalyticsUtil
 
 open class BaseActivity() :  AppCompatActivity() {
     private var loadingDialogFragment: LoadingDialogFragment? = null
@@ -24,6 +25,8 @@ open class BaseActivity() :  AppCompatActivity() {
             loadingDialogFragment = LoadingDialogFragment.newInstance(it, onLoadingDialogCancelListener)
             it.beginTransaction().setCustomAnimations(R.anim.animation_fragment_enter, R.anim.animation_fragment_exit)
         }
+
+        AnalyticsUtil.track(this, "ENTROU_NA_ACTIVITY")
 
     }
 

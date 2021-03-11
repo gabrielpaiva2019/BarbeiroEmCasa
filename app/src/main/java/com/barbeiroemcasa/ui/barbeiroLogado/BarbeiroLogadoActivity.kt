@@ -22,6 +22,7 @@ import com.barbeiroemcasa.infra.ApplicationSession
 import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
 import com.barbeiroemcasa.ui.feed.FeedActivity
+import com.barbeiroemcasa.ui.perfil.PerfilActivity
 import com.barbeiroemcasa.ui.uploadimage.SubirImagemFeedActivity
 import com.barbeiroemcasa.util.AnalyticsUtil
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.FirebaseAuth
+import com.tombayley.activitycircularreveal.CircularReveal
 import kotlinx.android.synthetic.main.map_barbeiro_bottom_sheet.*
 
 
@@ -54,6 +56,7 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         val buttonSubirFoto = findViewById<CardView>(R.id.cardViewAdicionarFoto)
         val cardViewFeed = findViewById<CardView>(R.id.cardViewFeed)
         val cardViewSair = findViewById<CardView>(R.id.cardViewLogout)
+        val cardViewPerfil = findViewById<CardView>(R.id.cardViewPerfil)
         val textViewBoasVindas = findViewById<TextView>(R.id.textViewBoasVindas)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
@@ -67,6 +70,9 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         cardViewFeed.setOnClickListener {
             AnalyticsUtil.track(this, "barbeiro_logado")
             startActivity(Intent(this, FeedActivity::class.java))
+        }
+        cardViewPerfil.setOnClickListener {
+         startActivity(Intent(this, PerfilActivity::class.java))
         }
     }
 

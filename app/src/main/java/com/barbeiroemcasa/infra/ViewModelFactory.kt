@@ -9,6 +9,8 @@ import com.barbeiroemcasa.ui.clientelogado.ClienteLogadoViewModel
 import com.barbeiroemcasa.ui.feed.FeedViewModel
 import com.barbeiroemcasa.ui.home.HomeViewModel
 import com.barbeiroemcasa.ui.login.BarbeiroLoginViewModel
+import com.barbeiroemcasa.ui.perfil.PerfilViewModel
+import com.barbeiroemcasa.ui.servicosbarbeiro.ServicosBarbeiroViewModel
 import com.barbeiroemcasa.ui.uploadimage.SubirImagemFeedViewModel
 
 class ViewModelFactory(
@@ -31,6 +33,10 @@ class ViewModelFactory(
                     SubirImagemFeedViewModel(application)
                 isAssignableFrom(FeedViewModel::class.java) ->
                     FeedViewModel(application)
+                isAssignableFrom(PerfilViewModel::class.java) ->
+                    PerfilViewModel(application)
+                isAssignableFrom(ServicosBarbeiroViewModel::class.java) ->
+                    ServicosBarbeiroViewModel(application)
                 else ->
                     throw ViewModelFactoryException()
             }

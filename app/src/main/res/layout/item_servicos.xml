@@ -7,39 +7,15 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/textViewNomeBarbeiro"
+        android:id="@+id/textViewNomeServico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:text="nomeBarbeiro"
+        android:text="nomeServico"
         android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
         app:layout_constraintTop_toTopOf="@+id/imageView3" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Online"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/cardView"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/cardView"
-        android:layout_width="15dp"
-        android:layout_height="13dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-android:background="@drawable/ball_success"
-        app:layout_constraintBottom_toBottomOf="@+id/textView7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView7" />
 
     <ImageView
         android:id="@+id/imageView3"
@@ -57,13 +33,16 @@ android:background="@drawable/ball_success"
         tools:ignore="UseAppTint" />
 
     <TextView
-        android:id="@+id/textViewEntrarContatoBarbeiro"
+        android:id="@+id/textViewValorCorte"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clique para verificar preços\ne agendar"
+        android:textSize="24sp"
+        android:text="R$ 24,00"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toStartOf="@+id/textViewNomeBarbeiro"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNomeBarbeiro" />
+        app:layout_constraintStart_toStartOf="@+id/textViewNomeServico"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNomeServico" />
 
     <View
         android:layout_width="200dp"

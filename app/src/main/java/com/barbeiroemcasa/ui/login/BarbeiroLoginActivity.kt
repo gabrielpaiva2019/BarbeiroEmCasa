@@ -1,6 +1,5 @@
 package com.barbeiroemcasa.ui.login
 
-import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,8 +15,6 @@ import com.barbeiroemcasa.extensions.stringText
 import com.barbeiroemcasa.infra.ApplicationSession
 import com.barbeiroemcasa.ui.barbeiroLogado.BarbeiroLogadoActivity
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
-import com.barbeiroemcasa.ui.loading.LoadingDialogFragment.Companion.DEFAULT_TITLE
-import com.github.loadingview.LoadingDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_barbeiro_login.*
 

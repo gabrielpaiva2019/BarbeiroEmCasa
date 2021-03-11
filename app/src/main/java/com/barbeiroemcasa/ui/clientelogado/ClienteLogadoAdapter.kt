@@ -2,6 +2,7 @@ package com.barbeiroemcasa.ui.clientelogado
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.barbeiroemcasa.R
 import com.barbeiroemcasa.model.Barbeiro
+import com.barbeiroemcasa.ui.servicosbarbeiro.ServicosBarbeiroActivity
 
 
 class ClienteLogadoAdapter(private var listaBarbeiros: List<Barbeiro>) : RecyclerView.Adapter<ClienteLogadoAdapter.ClienteLogadoViewHolder>() {
@@ -38,10 +40,15 @@ class ClienteLogadoAdapter(private var listaBarbeiros: List<Barbeiro>) : Recycle
     ) {
         var clienteLogadoViewHelper = ClienteLogadoViewHelper()
         holder.textViewContatoBarbeiro.setOnClickListener {
-            val url = "https://api.whatsapp.com/send?phone=${clienteLogadoViewHelper.getWhatsappFormatted(barbeiroObject.whatsappBarbeiro, holder.itemView.context)}"
-            val i = Intent( Intent.ACTION_VIEW)
-            i.data = Uri.parse(url)
-            startActivity(holder.itemView.context, i, null)
+
+
+
+
+            ServicosBarbeiroActivity.barbeiro = barbeiroObject
+            ServicosBarbeiroActivity.isCliente = true
+
+            var intent = Intent(holder.itemView.context, ServicosBarbeiroActivity::class.java)
+            holder.itemView.context.startActivity(intent)
         }
     }
 

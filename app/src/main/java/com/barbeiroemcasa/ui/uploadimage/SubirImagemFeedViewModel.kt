@@ -35,8 +35,8 @@ class SubirImagemFeedViewModel(application: Application) :
     }
 
     private fun saveImageFirebaseStorage(uriImageUpload: Uri?, feed: Feed) {
-
         val randomUid = UUID.randomUUID().toString()
+        feed.uidFeed = randomUid
 
         val storage = FirebaseStorage.getInstance().getReference("feed/barbeiro/$randomUid")
         storage.putFile(uriImageUpload!!).addOnSuccessListener {
