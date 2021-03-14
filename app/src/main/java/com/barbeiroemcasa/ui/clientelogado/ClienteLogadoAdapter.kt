@@ -42,8 +42,6 @@ class ClienteLogadoAdapter(private var listaBarbeiros: List<Barbeiro>) : Recycle
         holder.textViewContatoBarbeiro.setOnClickListener {
 
 
-
-
             ServicosBarbeiroActivity.barbeiro = barbeiroObject
             ServicosBarbeiroActivity.isCliente = true
 

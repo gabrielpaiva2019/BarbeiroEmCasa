@@ -17,6 +17,7 @@ import com.barbeiroemcasa.infra.ApplicationSession
 import com.barbeiroemcasa.model.Barbeiro
 import com.barbeiroemcasa.model.ServicoBarbeiro
 import com.barbeiroemcasa.ui.clientelogado.ClienteLogadoViewHelper
+import com.barbeiroemcasa.util.AnalyticsUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -46,6 +47,8 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
 
             var clienteWrapper = ClienteLogadoViewHelper()
             imageViewAppIcon.setOnClickListener {
+
+                AnalyticsUtil.track(this,"CLIENTE_CLICOU_WHATSAPP_BARBEIRO")
                 val url =
                     "https://api.whatsapp.com/send?phone=${clienteWrapper.getWhatsappFormatted(
                         barbeiro?.whatsappBarbeiro!!,
@@ -54,6 +57,8 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
                 val i = Intent(Intent.ACTION_VIEW)
                 i.data = Uri.parse(url)
                 startActivity(i)
+
+
 
 
 
