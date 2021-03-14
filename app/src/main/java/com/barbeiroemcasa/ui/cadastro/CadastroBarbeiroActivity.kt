@@ -23,7 +23,9 @@ import com.barbeiroemcasa.ui.barbeiroLogado.BarbeiroLogadoActivity
 import com.barbeiroemcasa.util.MaskEditUtil
 import com.github.loadingview.LoadingDialog
 import com.google.firebase.auth.FirebaseAuth
+import com.scottyab.aescrypt.AESCrypt
 import kotlinx.android.synthetic.main.activity_cadastro_barbeiro.*
+import java.security.GeneralSecurityException
 
 
 class CadastroBarbeiroActivity : BaseActivity(), LocationListener {

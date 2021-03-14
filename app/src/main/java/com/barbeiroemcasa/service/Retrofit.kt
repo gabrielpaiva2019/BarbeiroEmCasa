@@ -15,7 +15,7 @@ class Retrofit {
     companion object {
         fun getBarbeiroServiceInstance() : Retrofit {
             return Retrofit.Builder()
-                .baseUrl("http://192.168.0.124:8080/")
+                .baseUrl("https://barbeiro-em-casa.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }

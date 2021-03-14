@@ -35,6 +35,7 @@ class CadastroBarbeiroViewModel(application: Application):
     ) {
         val firebaseDatabase = FirebaseDatabase.getInstance().getReference("usuarios/barbeiros/${barbeiroObject.uid}")
 
+        barbeiroObject.senhaBarbeiro = ""
         firebaseDatabase.setValue(barbeiroObject).addOnCompleteListener {completionListener ->
             if (completionListener.isSuccessful){
                 successLiveData.value = true
