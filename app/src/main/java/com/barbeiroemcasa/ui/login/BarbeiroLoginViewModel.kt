@@ -19,8 +19,6 @@ class BarbeiroLoginViewModel(application: Application):
 
     fun doLogin(editTextLoginEmail: String, editTextLoginSenha: String) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(editTextLoginEmail, editTextLoginSenha).addOnSuccessListener {
-            isLoggedSuccessLiveData.value = true
-
             getBarbeiroInformacoes()
         }.addOnFailureListener {exception ->
             isLoggedSuccessLiveData.value = false
@@ -45,7 +43,11 @@ class BarbeiroLoginViewModel(application: Application):
                 if (barbeiro == null){
                     errorMessageLiveData.value = "Ops... você não possui cadastro de barbeiro, crie uma conta de barbeiro"
                     FirebaseAuth.getInstance().signOut()
+                }else{
+                    isLoggedSuccessLiveData.value = true
                 }
+
+
             }
 
         })

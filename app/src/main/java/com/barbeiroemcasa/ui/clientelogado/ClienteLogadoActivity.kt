@@ -9,12 +9,14 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.barbeiroemcasa.BaseActivity
 import com.barbeiroemcasa.R
+import com.barbeiroemcasa.model.Barbeiro
 import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
 import com.barbeiroemcasa.ui.feed.FeedActivity
@@ -23,8 +25,12 @@ import kotlinx.android.synthetic.main.activity_cliente_logado.*
 
 class ClienteLogadoActivity : BaseActivity(), LocationListener {
     lateinit var viewModel: ClienteLogadoViewModel
-    private lateinit var location: LocationManager
+    private lateinit var locationManager: LocationManager
     private var currentLatlngUser: LatLng? = null
+    var currentSelectedKm = 7.0
+
+    var recyclerJaFoiConfigurada = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -32,11 +38,23 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
         setContentView(R.layout.activity_cliente_logado)
 
         iniciaVariaveis()
-        iniciaObservers()
         iniciaListeners()
+
+        viewModel.clienteActivityParaGambiarra = this
+
         if (isPermissoesAceitas()) {
-            currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it) }
+            currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it, currentSelectedKm) }
         }
+    }
+
+    fun showProgressBar(){
+        recyclerViewBarbeirosDisponiveis.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+    }
+
+    fun hideProgressBar(){
+        recyclerViewBarbeirosDisponiveis.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
     }
 
     private fun iniciaListeners() {
@@ -44,17 +62,43 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
             startActivity(Intent(this, FeedActivity::class.java))
             AnalyticsUtil.track(this, "cliente_logado")
         }
+
+        toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isPermissoesAceitas()) {
+                when (checkedId) {
+                    R.id.buttonSevenKm -> {
+                        currentSelectedKm = 7.0
+                        recyclerJaFoiConfigurada = false
+                        currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it, 7.0) }
+
+                    }
+                    R.id.buton15km -> {
+                        currentSelectedKm = 15.0
+                        recyclerJaFoiConfigurada = false
+                        currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it, 15.0) }
+                    }
+                    R.id.button30km -> {
+                        currentSelectedKm = 30.0
+                        recyclerJaFoiConfigurada = false
+                        currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it, 30.0) }
+                    }
+
+                    R.id.button100km -> {
+                        currentSelectedKm = 100.0
+                        recyclerJaFoiConfigurada = false
+                        currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it, 100.0) }
+                    }
+                }
+
+            } else {
+                mostrarDialogIncentivoPermissaoLocalizacao()
+            }
+        }
     }
 
-    private fun iniciaObservers() {
-        viewModel.listaBarbeirosLiveData.observe(this, Observer {
-            recyclerViewBarbeirosDisponiveis.layoutManager = LinearLayoutManager(this)
-            recyclerViewBarbeirosDisponiveis.adapter = ClienteLogadoAdapter(it)
-        })
-    }
 
     private fun iniciaVariaveis() {
-        location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         viewModel = getViewModel(ClienteLogadoViewModel::class.java, application)
     }
 
@@ -75,7 +119,7 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     @SuppressLint("MissingPermission")
     private fun configuraLocalizacao() {
         if (isPermissoesAceitas()) {
-            location.requestLocationUpdates(
+            locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 60000, 2.0f, this
             )
@@ -122,7 +166,10 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
                 lng = location.longitude
             )
 
-        currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it) }
+        currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it, currentSelectedKm) }
+
+        locationManager.removeUpdates(this)
+
     }
 
 
@@ -143,5 +190,16 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
     override fun onProviderDisabled(provider: String) {}
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+    fun setUpRecyclerView(listaBarbeiros: MutableList<Barbeiro>) {
+        var listaBackup = mutableListOf<Barbeiro>()
+        for (barbeiro in listaBarbeiros) {
+            listaBackup.add(barbeiro)
+        }
+
+        recyclerViewBarbeirosDisponiveis.layoutManager = LinearLayoutManager(this)
+        recyclerViewBarbeirosDisponiveis.adapter = ClienteLogadoAdapter(listaBackup)
+        recyclerJaFoiConfigurada = true
+    }
 
 }

@@ -23,7 +23,7 @@ class SubirImagemFeedViewModel(application: Application) :
 
 
     fun saveFeedItem(uriImageUpload: Uri?, feed: Feed) {
-        ApplicationSession.barbeiro.let {
+        ApplicationSession.barbeiro?.let {
             feed.whatsappBarbeiro = it.whatsappBarbeiro
             feed.dataPublicacao = getDateFormated()
             feed.horaPublicacao = getHourFormated()

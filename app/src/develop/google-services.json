@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "631110825963",
+    "project_id": "barbeiro-em-casa-dev",
+    "storage_bucket": "barbeiro-em-casa-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:631110825963:android:eb8167c4281a6baa81cbae",
+        "android_client_info": {
+          "package_name": "com.barbeiroemcasa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "631110825963-tpiqnfacbie2at91slnrp6nq8sq3aqq3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXDQngxzTFZI9g-FT1sCqLhh_f1HPaR7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "631110825963-tpiqnfacbie2at91slnrp6nq8sq3aqq3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

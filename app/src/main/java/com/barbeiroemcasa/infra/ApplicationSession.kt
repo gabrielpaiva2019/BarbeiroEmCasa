@@ -4,7 +4,7 @@ import com.barbeiroemcasa.model.Barbeiro
 import com.google.firebase.auth.FirebaseAuth
 
 object ApplicationSession {
-   lateinit var barbeiro: Barbeiro
+   var barbeiro: Barbeiro? = null
 
 
    fun isUsuarioLogado(): Boolean{

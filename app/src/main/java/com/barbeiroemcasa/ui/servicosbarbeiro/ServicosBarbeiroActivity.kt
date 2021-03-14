@@ -144,7 +144,7 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
     private fun sendToFirebase(servicoBarbeiro: ServicoBarbeiro) {
         var uid = FirebaseAuth.getInstance().uid
 
-        servicoBarbeiro.barbeiro = ApplicationSession.barbeiro
+        servicoBarbeiro.barbeiro = ApplicationSession.barbeiro!!
         var randomUid = UUID.randomUUID().toString()
         servicoBarbeiro.uuid = randomUid
         var database = FirebaseDatabase.getInstance()

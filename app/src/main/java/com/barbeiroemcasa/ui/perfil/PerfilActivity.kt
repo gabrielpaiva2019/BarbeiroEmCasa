@@ -24,10 +24,10 @@ class PerfilActivity : AppCompatActivity() {
 
 
     private fun getFormattedBarbeiroNome(): String {
-        return if (ApplicationSession.barbeiro.nomeBarbeiro.length == 23) {
-            ApplicationSession.barbeiro.nomeBarbeiro.subSequence(0, 20).toString() + "..."
+        return if (ApplicationSession.barbeiro?.nomeBarbeiro?.length == 23) {
+            ApplicationSession.barbeiro?.nomeBarbeiro?.subSequence(0, 20).toString() + "..."
         } else {
-            ApplicationSession.barbeiro.nomeBarbeiro
+            ApplicationSession.barbeiro?.nomeBarbeiro!!
         }
     }
 

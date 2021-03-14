@@ -30,6 +30,11 @@ class BarbeiroLogadoViewModel(application: Application) :
             FirebaseDatabase.getInstance().getReference("localizacao/barbeiros")
         val geofire = GeoFire(db)
         geofire.setLocation(FirebaseAuth.getInstance().uid, geoLocation)
+
+        if (ApplicationSession.barbeiro != null){
+            geofire.databaseReference.database.getReference("localizacao/barbeiros/${FirebaseAuth.getInstance().uid}/dadosBarbeiro")
+                .setValue(ApplicationSession.barbeiro)
+        }
         locationLiveData.value = currentLatlngUser
     }
 

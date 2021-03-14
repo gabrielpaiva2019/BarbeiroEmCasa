@@ -21,10 +21,6 @@ open class BaseActivity() :  AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager?.let {
-            loadingDialogFragment = LoadingDialogFragment.newInstance(it, onLoadingDialogCancelListener)
-            it.beginTransaction().setCustomAnimations(R.anim.animation_fragment_enter, R.anim.animation_fragment_exit)
-        }
 
         AnalyticsUtil.track(this, "ENTROU_NA_ACTIVITY")
 
@@ -33,19 +29,26 @@ open class BaseActivity() :  AppCompatActivity() {
     internal fun hideLoading(){
         loadingDialogFragment?.let {
             if (it.isVisible){
-                it.dismissAllowingStateLoss()
+                supportFragmentManager.beginTransaction().remove(it).commit()
+                it.dismiss()
+                supportFragmentManager.executePendingTransactions()
             }
         }
     }
 
     private val onLoadingDialogCancelListener = object : LoadingDialogFragment.OnLoadingDialogCancelListener{
         override fun onCancel() {
-            onBackPressed()
+            loadingDialogFragment?.dismiss()
         }
 
     }
 
     fun showLoading(title: String = DEFAULT_TITLE){
+        supportFragmentManager?.let {
+            loadingDialogFragment = LoadingDialogFragment.newInstance(it, onLoadingDialogCancelListener)
+            it.beginTransaction().setCustomAnimations(R.anim.animation_fragment_enter, R.anim.animation_fragment_exit)
+        }
+
         loadingDialogFragment?.let {
             if (!it.isVisible){
                 it.setCustomTitle(title)
