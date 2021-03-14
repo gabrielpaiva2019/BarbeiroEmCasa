@@ -13,11 +13,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network"
         android:theme="@style/Theme.BarbeiroEmCasa">
-        <activity android:name=".ui.servicosbarbeiro.ServicosBarbeiroActivity"></activity>
+        <activity android:name=".ui.barbeirogold.BarbeiroGoldActivity"></activity>
+        <activity android:name=".ui.servicosbarbeiro.ServicosBarbeiroActivity" />
         <activity android:name=".ui.feed.FeedActivity" />
         <activity android:name=".ui.uploadimage.SubirImagemFeedActivity" />
         <activity android:name=".ui.clientelogado.ClienteLogadoActivity" />
@@ -36,7 +37,7 @@
         </service>
 
         <activity android:name=".ui.barbeiroLogado.BarbeiroLogadoActivity" />
-        <activity android:name=".ui.cadastro.CadastroBarbeiroActivity"></activity>
+        <activity android:name=".ui.cadastro.CadastroBarbeiroActivity" />
         <activity android:name=".ui.perfil.PerfilActivity" />
         <activity
             android:name=".ui.login.BarbeiroLoginActivity"

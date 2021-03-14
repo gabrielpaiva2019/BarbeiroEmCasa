@@ -2,6 +2,7 @@ package com.barbeiroemcasa.ui.perfil
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.barbeiroemcasa.R
 import com.barbeiroemcasa.infra.ApplicationSession
@@ -18,6 +19,10 @@ class PerfilActivity : AppCompatActivity() {
 
         cardViewPerfilMeusServicos.setOnClickListener {
             startActivity(Intent(this, ServicosBarbeiroActivity::class.java))
+        }
+
+        cardViewDadosCadastrais.setOnClickListener {
+            Toast.makeText(this, "em breve", Toast.LENGTH_SHORT).show()
         }
 
     }

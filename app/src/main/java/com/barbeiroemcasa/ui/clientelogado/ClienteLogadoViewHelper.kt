@@ -5,7 +5,7 @@ import android.content.Context
 class ClienteLogadoViewHelper {
 
     fun getWhatsappFormatted(whatsappBarbeiro: String, context: Context): String{
-        val countryCode: String = context.resources.configuration.locale.country
+        val countryCode: String = "+55"
         return countryCode + whatsappBarbeiro
     }
 }

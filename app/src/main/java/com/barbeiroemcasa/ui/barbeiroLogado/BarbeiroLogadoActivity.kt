@@ -20,6 +20,7 @@ import com.barbeiroemcasa.BaseActivity
 import com.barbeiroemcasa.R
 import com.barbeiroemcasa.infra.ApplicationSession
 import com.barbeiroemcasa.model.LatLng
+import com.barbeiroemcasa.ui.barbeirogold.BarbeiroGoldActivity
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
 import com.barbeiroemcasa.ui.feed.FeedActivity
 import com.barbeiroemcasa.ui.perfil.PerfilActivity
@@ -58,7 +59,12 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         val cardViewSair = findViewById<CardView>(R.id.cardViewLogout)
         val cardViewPerfil = findViewById<CardView>(R.id.cardViewPerfil)
         val textViewBoasVindas = findViewById<TextView>(R.id.textViewBoasVindas)
+        val cardViewBarbeiroGold = findViewById<CardView>(R.id.cardViewBarbeiroGold)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        cardViewBarbeiroGold.setOnClickListener {
+            startActivity(Intent(this, BarbeiroGoldActivity::class.java))
+        }
 
         cardViewSair.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -72,7 +78,7 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
             startActivity(Intent(this, FeedActivity::class.java))
         }
         cardViewPerfil.setOnClickListener {
-         startActivity(Intent(this, PerfilActivity::class.java))
+            startActivity(Intent(this, PerfilActivity::class.java))
         }
     }
 

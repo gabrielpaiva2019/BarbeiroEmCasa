@@ -28,7 +28,6 @@
             android:ellipsize="end"
             android:maxLength="23"
             android:maxLines="1"
-            android:text="Carlos Gabriel Nascimento de Paiva"
             android:textColor="@color/black"
             android:textSize="32dp"
             android:textStyle="bold"

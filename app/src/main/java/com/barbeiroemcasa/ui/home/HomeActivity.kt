@@ -8,9 +8,8 @@ import com.barbeiroemcasa.R
 import com.barbeiroemcasa.infra.ApplicationSession
 import com.barbeiroemcasa.ui.clientelogado.ClienteLogadoActivity
 import com.barbeiroemcasa.ui.login.BarbeiroLoginActivity
-import com.github.loadingview.LoadingDialog
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class HomeActivity : BaseActivity() {
 
