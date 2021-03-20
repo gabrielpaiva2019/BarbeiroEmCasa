@@ -17,11 +17,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarbeiroEmCasa">
-        <activity android:name=".ui.barbeirogold.BarbeiroGoldActivity"></activity>
+        <activity android:name=".ui.dadoscadastrais.DadosCadastraisActivity"></activity>
+        <activity android:name=".ui.barbeirogold.BarbeiroGoldActivity" />
         <activity android:name=".ui.servicosbarbeiro.ServicosBarbeiroActivity" />
         <activity android:name=".ui.feed.FeedActivity" />
         <activity android:name=".ui.uploadimage.SubirImagemFeedActivity" />
         <activity android:name=".ui.clientelogado.ClienteLogadoActivity" />
+
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://0976b0c47ffe413f8d0dbe8d99db444f@o555206.ingest.sentry.io/5684800" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

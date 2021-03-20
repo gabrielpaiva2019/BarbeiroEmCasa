@@ -4,11 +4,8 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +21,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_servicos_barbeiro.*
-import java.text.NumberFormat
 import java.util.*
 
 
@@ -39,7 +35,7 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
 
         getBundleInfo()
 
-        if (isCliente){
+        if (isCliente) {
             floatingActionButtonAddServico.visibility = View.GONE
             textViewServicosNomeBarbeiro.text = barbeiro?.nomeBarbeiro
             imageViewAppIcon.setBackgroundResource(R.drawable.ic_whatsapp)
@@ -48,7 +44,7 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
             var clienteWrapper = ClienteLogadoViewHelper()
             imageViewAppIcon.setOnClickListener {
 
-                AnalyticsUtil.track(this,"CLIENTE_CLICOU_WHATSAPP_BARBEIRO")
+                AnalyticsUtil.track(this, "CLIENTE_CLICOU_WHATSAPP_BARBEIRO")
                 val url =
                     "https://api.whatsapp.com/send?phone=${clienteWrapper.getWhatsappFormatted(
                         barbeiro?.whatsappBarbeiro!!,
@@ -57,9 +53,6 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
                 val i = Intent(Intent.ACTION_VIEW)
                 i.data = Uri.parse(url)
                 startActivity(i)
-
-
-
 
 
             }
@@ -79,7 +72,7 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
     private fun getBundleInfo() {
         uidBarbeiro = barbeiro?.uid
 
-        if (!isCliente){
+        if (!isCliente) {
             uidBarbeiro = FirebaseAuth.getInstance().uid
         }
     }
@@ -111,7 +104,8 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
 
     private fun setUpAdapter(listServicos: MutableList<ServicoBarbeiro>) {
         recyclerViewServicos.layoutManager = LinearLayoutManager(this)
-        recyclerViewServicos.adapter = ServicosBarbeiroAdapter(listServicos)
+        recyclerViewServicos.adapter = ServicosBarbeiroAdapter(listServicos,
+            { configRecyclerView() }, this, isCliente)
     }
 
     private fun showDialogAddServico() {
@@ -162,7 +156,7 @@ class ServicosBarbeiroActivity : AppCompatActivity() {
     }
 
 
-    companion object{
+    companion object {
         var isCliente = false
         var barbeiro: Barbeiro? = null
     }

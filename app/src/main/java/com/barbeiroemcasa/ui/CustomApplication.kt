@@ -3,6 +3,8 @@ package com.barbeiroemcasa.ui
 import android.app.Application
 import com.barbeiroemcasa.util.AnalyticsUtil
 import com.onesignal.OneSignal
+import io.sentry.Sentry
+import java.lang.RuntimeException
 
 class CustomApplication: Application() {
 

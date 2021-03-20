@@ -3,10 +3,10 @@ package com.barbeiroemcasa.ui.barbeirogold
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.billingclient.api.*
 import com.barbeiroemcasa.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.android.synthetic.main.activity_barbeiro_gold.*
 
 class BarbeiroGoldActivity : AppCompatActivity() {
 
@@ -52,10 +52,9 @@ class BarbeiroGoldActivity : AppCompatActivity() {
         params.setSkusList(skuList).setType(BillingClient.SkuType.SUBS)
         billingClient.querySkuDetailsAsync(params.build()) { billingResult, skuDetailsList ->
 
-            val flowParams = BillingFlowParams.newBuilder()
-                .setSkuDetails(skuDetailsList!![0])
-                .build()
-            val responseCode = billingClient.launchBillingFlow(this, flowParams)
+
+            recyclerSkus.layoutManager = LinearLayoutManager(this)
+            recyclerSkus.adapter = BarbeiroGoldAdapter(skuDetailsList!!, billingClient, this)
 
 
         }

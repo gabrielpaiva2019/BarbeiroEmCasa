@@ -42,6 +42,8 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
 
         viewModel.clienteActivityParaGambiarra = this
 
+        verificaPermissoesLocalizacao()
+
         if (isPermissoesAceitas()) {
             currentLatlngUser?.let { viewModel.queryBarbeirosAoRedor(it, currentSelectedKm) }
         }
@@ -104,7 +106,6 @@ class ClienteLogadoActivity : BaseActivity(), LocationListener {
 
     override fun onStart() {
         super.onStart()
-        verificaPermissoesLocalizacao()
 
     }
 

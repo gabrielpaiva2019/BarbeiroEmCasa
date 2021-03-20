@@ -13,6 +13,8 @@ class HomeViewModel(application: Application):
     fun doPrivateLogin() {
         FirebaseAuth.getInstance().signInAnonymously().addOnSuccessListener {
             loginSuccessLiveData.value = true
+        }.addOnFailureListener {
+            loginSuccessLiveData.value = false
         }
     }
 

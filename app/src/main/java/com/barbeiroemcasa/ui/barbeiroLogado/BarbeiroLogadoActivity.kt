@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -63,21 +64,26 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         cardViewBarbeiroGold.setOnClickListener {
-            startActivity(Intent(this, BarbeiroGoldActivity::class.java))
+//            startActivity(Intent(this, BarbeiroGoldActivity::class.java))
+            Toast.makeText(this, "em breve ...", Toast.LENGTH_SHORT).show()
+            AnalyticsUtil.track(this, "BARBEIRO_GOLD_EM_BREVE")
         }
 
         cardViewSair.setOnClickListener {
+            AnalyticsUtil.track(this, "BARBEIRO_LOGOUT")
             FirebaseAuth.getInstance().signOut()
             this.finish()
         }
         buttonSubirFoto.setOnClickListener {
             startActivity(Intent(this, SubirImagemFeedActivity::class.java))
+            AnalyticsUtil.track(this, "SUBIR_FOTO_FEED_BARBEIRO")
         }
         cardViewFeed.setOnClickListener {
-            AnalyticsUtil.track(this, "barbeiro_logado")
+            AnalyticsUtil.track(this, "FEED_ACTIVITY_BARBEIRO")
             startActivity(Intent(this, FeedActivity::class.java))
         }
         cardViewPerfil.setOnClickListener {
+            AnalyticsUtil.track(this, "PERFIL_ACTIVITY_BARBEIRO")
             startActivity(Intent(this, PerfilActivity::class.java))
         }
     }
