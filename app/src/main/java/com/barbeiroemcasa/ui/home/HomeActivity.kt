@@ -6,8 +6,11 @@ import androidx.lifecycle.Observer
 import com.barbeiroemcasa.BaseActivity
 import com.barbeiroemcasa.R
 import com.barbeiroemcasa.infra.ApplicationSession
+import com.barbeiroemcasa.ui.cadastro.cadastroCliente.CadastroClienteActivity
 import com.barbeiroemcasa.ui.clientelogado.ClienteLogadoActivity
 import com.barbeiroemcasa.ui.login.BarbeiroLoginActivity
+import com.barbeiroemcasa.ui.loginCliente.ClienteLoginActivity
+import com.barbeiroemcasa.util.AnalyticsUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -43,14 +46,12 @@ class HomeActivity : BaseActivity() {
     private fun iniciaListeners() {
         buttonSouBarbeiro?.setOnClickListener {
             startActivity(Intent(this, BarbeiroLoginActivity::class.java))
+            AnalyticsUtil.track(this, "CLIQUE_BOTAO_SOU_BARBEIRO")
         }
         buttonSouCliente?.setOnClickListener {
-            if (ApplicationSession.isUsuarioLogado()) {
-                startActivity(Intent(this, ClienteLogadoActivity::class.java))
-            } else {
-                showLoading()
-                configuraLogin()
-            }
+            AnalyticsUtil.track(this, "CLIQUE_BOTAO_SOU_CLIENTE")
+            startActivity(Intent(this, ClienteLoginActivity::class.java))
+
         }
     }
 

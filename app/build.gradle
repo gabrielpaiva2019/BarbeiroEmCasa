@@ -11,10 +11,10 @@ plugins {
 android {
     signingConfigs {
         debug {
-            storeFile file('/Users/gabriel/Desktop/Projetos/BarbeiroEmCasa/BarbeiroEmCasa')
-            storePassword '270996'
-            keyAlias 'barbeiroemcasa'
-            keyPassword '270996'
+//            storeFile file('/Users/gabriel/Desktop/Projetos/BarbeiroEmCasa/BarbeiroEmCasa')
+//            storePassword '270996'
+//            keyAlias 'barbeiroemcasa'
+//            keyPassword '270996'
         }
         develop {
             storeFile file('/Users/gabriel/Desktop/Projetos/BarbeiroEmCasa/BarbeiroEmCasa')
@@ -37,8 +37,8 @@ android {
         applicationId "com.barbeiroemcasa"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 24
-        versionName "1.3.7"
+        versionCode 25
+        versionName "1.3.8"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

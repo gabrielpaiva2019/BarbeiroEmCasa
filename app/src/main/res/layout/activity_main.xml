@@ -32,7 +32,7 @@
 
     <Button
         android:id="@+id/buttonSouBarbeiro"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Sou barbeiro"
         android:textAllCaps="false"
@@ -71,7 +71,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Sou cliente"
+        android:text="Preciso de um barbeiro"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="@+id/buttonSouBarbeiro"
         app:layout_constraintStart_toStartOf="@+id/buttonSouBarbeiro"

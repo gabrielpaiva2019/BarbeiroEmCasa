@@ -23,6 +23,8 @@
         <activity android:name=".ui.feed.FeedActivity" />
         <activity android:name=".ui.uploadimage.SubirImagemFeedActivity" />
         <activity android:name=".ui.clientelogado.ClienteLogadoActivity" />
+        <activity android:name=".ui.cadastro.cadastroCliente.CadastroClienteActivity" />
+        <activity android:name=".ui.loginCliente.ClienteLoginActivity" />
 
         <meta-data
             android:name="io.sentry.dsn"

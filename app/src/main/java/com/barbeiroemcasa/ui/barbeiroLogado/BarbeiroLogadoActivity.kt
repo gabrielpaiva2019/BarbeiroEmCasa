@@ -24,6 +24,7 @@ import com.barbeiroemcasa.model.LatLng
 import com.barbeiroemcasa.ui.barbeirogold.BarbeiroGoldActivity
 import com.barbeiroemcasa.ui.cadastro.CadastroBarbeiroActivity
 import com.barbeiroemcasa.ui.feed.FeedActivity
+import com.barbeiroemcasa.ui.home.HomeActivity
 import com.barbeiroemcasa.ui.perfil.PerfilActivity
 import com.barbeiroemcasa.ui.uploadimage.SubirImagemFeedActivity
 import com.barbeiroemcasa.util.AnalyticsUtil
@@ -50,6 +51,8 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
         inicializaVariaveis()
         inicializaMapa()
         inicializaBottomSheet()
+
+
     }
 
     private fun inicializaBottomSheet() {
@@ -140,6 +143,11 @@ class BarbeiroLogadoActivity : BaseActivity(), LocationListener, OnMapReadyCallb
 
     override fun onStart() {
         super.onStart()
+        if (ApplicationSession.barbeiro == null){
+            FirebaseAuth.getInstance().signOut()
+            this.finish()
+            startActivity(Intent(this, HomeActivity::class.java))
+        }
         if (isPermissoesAceitas()) {
             configuraLocalizacao()
         } else {

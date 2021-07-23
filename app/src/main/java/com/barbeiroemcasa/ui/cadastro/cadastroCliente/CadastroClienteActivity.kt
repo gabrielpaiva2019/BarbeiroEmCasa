@@ -1,0 +1,190 @@
+package com.barbeiroemcasa.ui.cadastro.cadastroCliente
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Observer
+import com.barbeiroemcasa.BaseActivity
+import com.barbeiroemcasa.R
+import com.barbeiroemcasa.extensions.stringText
+import com.barbeiroemcasa.infra.ApplicationSession
+import com.barbeiroemcasa.model.Barbeiro
+import com.barbeiroemcasa.model.LatLng
+import com.barbeiroemcasa.ui.barbeiroLogado.BarbeiroLogadoActivity
+import com.barbeiroemcasa.ui.clientelogado.ClienteLogadoActivity
+import com.barbeiroemcasa.util.MaskEditUtil
+import com.github.loadingview.LoadingDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.scottyab.aescrypt.AESCrypt
+import kotlinx.android.synthetic.main.activity_cadastro_barbeiro.*
+import java.security.GeneralSecurityException
+
+
+class CadastroClienteActivity : BaseActivity(), LocationListener {
+
+    private lateinit var viewModel: CadastroClienteViewModel
+    private lateinit var location: LocationManager
+    private lateinit var currentLatlngUser: LatLng
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_cadastro_cliente)
+
+        inicializaVariaveis()
+        inicializaListeners()
+        inicializaObservers()
+        inicializaViews()
+
+    }
+
+    private fun inicializaViews() {
+        editTextWhatsappBarbeiro.addTextChangedListener(
+            MaskEditUtil.mask(
+                editTextWhatsappBarbeiro,
+                MaskEditUtil.FORMAT_FONE
+            )
+        )
+    }
+
+    private fun inicializaObservers() {
+        viewModel.successLiveData.observe(this, Observer {isSucesso ->
+            if (isSucesso){
+                hideLoading()
+                mostrarTelaBarbeiroLogado()
+            }
+        })
+
+        viewModel.errorLiveData.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        })
+    }
+
+    private fun mostrarTelaBarbeiroLogado() {
+        startActivity(Intent(this, ClienteLogadoActivity::class.java))
+    }
+
+    private fun inicializaListeners() {
+        buttonCadastrarBarbeiro.setOnClickListener {
+            if (isPermissoesAceitas()) {
+                if (!editTextEmailBarbeiro.text.isNullOrBlank() && !editTextInstagramBarbeiro.text.isNullOrBlank() && !editTextNomeBarbeiro.text.isNullOrBlank() != null &&
+                    !editTextSenhaBarbeiro.text.isNullOrBlank() != null && !editTextWhatsappBarbeiro.text.isNullOrBlank() != null
+                ) {
+                    showLoading()
+                    viewModel.criarNovaContaBarbeiro(getBarbeiroObject())
+                } else {
+                    hideLoading()
+                    Toast.makeText(this, "Todos os campos devem ser preenchidos", Toast.LENGTH_LONG)
+                        .show()
+                }
+            } else {
+                mostrarDialogIncentivoPermissaoLocalizacao()
+            }
+
+        }
+    }
+
+    private fun getBarbeiroObject(): Barbeiro {
+        var barbeiro = Barbeiro()
+        barbeiro.nomeBarbeiro = editTextNomeBarbeiro.stringText()
+        barbeiro.whatsappBarbeiro = CadastroClienteViewHelper()
+            .getNumeroTelefoneFormatado(editTextWhatsappBarbeiro.stringText())
+        barbeiro.instagramBarbeiro = editTextInstagramBarbeiro.stringText()
+        barbeiro.emailBarbeiro = editTextEmailBarbeiro.stringText()
+        barbeiro.senhaBarbeiro = editTextSenhaBarbeiro.stringText()
+        barbeiro.uid = ""
+        return barbeiro
+    }
+
+    private fun inicializaVariaveis() {
+        location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        viewModel = getViewModel(
+            viewModelClass = CadastroClienteViewModel::class.java,
+            application = application
+        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        verificaPermissoesLocalizacao()
+    }
+
+    private fun verificaPermissoesLocalizacao() {
+        if (!isPermissoesAceitas()) {
+            mostrarDialogIncentivoPermissaoLocalizacao()
+        } else {
+            configuraLocalizacao()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun configuraLocalizacao() {
+        if (isPermissoesAceitas()) {
+            location.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000, 2.0f, this
+            )
+        }
+    }
+
+    private fun isPermissoesAceitas(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun mostrarDialogIncentivoPermissaoLocalizacao() {
+        val dialogBuilder = AlertDialog.Builder(this)
+        dialogBuilder.setMessage(PERMISSION_INCENTIVE_MESAGE)
+            .setCancelable(false)
+            .setPositiveButton("Ok") { _: DialogInterface, _: Int ->
+                mostrarPermissoes()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.show()
+    }
+
+    private fun mostrarPermissoes() {
+        ActivityCompat.requestPermissions(
+            this, arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ), LOCATION_REQUEST_CODE
+        )
+    }
+
+    override fun onLocationChanged(location: Location) {
+        currentLatlngUser =
+            LatLng(
+                lat = location.latitude,
+                lng = location.longitude
+            )
+    }
+
+    override fun onProviderEnabled(provider: String) {}
+
+    override fun onProviderDisabled(provider: String) {}
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+    companion object {
+        const val LOCATION_REQUEST_CODE = 2
+        const val PERMISSION_INCENTIVE_MESAGE =
+            "Para prosseguir, precisamos que aceite as permissões de localização, nós utilizamos ela para mostrar aos nossos usuários os barbeiros perto deles"
+    }
+
+}
